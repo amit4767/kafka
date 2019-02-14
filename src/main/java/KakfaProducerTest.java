@@ -6,10 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
 public class KakfaProducerTest {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         Properties properties = new Properties();
         //properties.setProperty("bootstrap.servers","192.168.99.100:9092");
 
@@ -23,20 +24,32 @@ public class KakfaProducerTest {
 
         KafkaProducer<String ,String> producer = new KafkaProducer<String, String>(properties) ;
 
-        ProducerRecord<String ,String> test = new ProducerRecord<String ,String>("amittest222" ,"aassadafdafdss");
-        ///producer.flush();
-        producer.send(test, new Callback() {
-            public void onCompletion(RecordMetadata recordMetadata, Exception e) {
 
-                if(e ==null){
-                    logger.info("recordMedata ="+recordMetadata.topic());
-                    logger.info("recordMedata ="+recordMetadata.offset());
-                    logger.info("recordMedata ="+recordMetadata.partition());
-                }else
-                    logger.error("error ="+e);
+        for(int i = 0 ; i< 10 ;i++){
 
-            }
-        });
+            String topic = "amittest";
+            String value = "value"+i;
+            String key = "value"+i;
+
+            ProducerRecord<String ,String> test = new ProducerRecord<String ,String>(topic,key,value);
+            ///producer.flush();
+            producer.send(test, new Callback() {
+                public void onCompletion(RecordMetadata recordMetadata, Exception e) {
+
+                    if(e ==null){
+                        logger.info("recordMedata ="+recordMetadata.topic());
+                        logger.info("recordMedata ="+recordMetadata.offset());
+                        logger.info("recordMedata ="+recordMetadata.partition());
+                    }else
+                        logger.error("error ="+e);
+
+                }
+            }).get();
+
+
+        }
+
+
         producer.flush();
         producer.close();
         //  nK98fOK_Qo-ppqZnwo3GMw      //
