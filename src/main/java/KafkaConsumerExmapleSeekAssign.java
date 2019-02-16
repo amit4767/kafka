@@ -25,53 +25,29 @@ public class KafkaConsumerExmapleSeekAssign {
         properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,StringDeserializer.class.getName());
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG,"myid2");
         properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"earliest");
-
         KafkaConsumer<String,String> kafkaConsumer = new KafkaConsumer<String, String>(properties);
-
 
         // if u enable this line also it will fail coz need mutually exclusive
        // kafkaConsumer.subscribe(Arrays.asList(topic));
-
         TopicPartition partition=  new TopicPartition(topic,0);
         long readOffsetFrom = 15l;
         kafkaConsumer.assign(Arrays.asList(partition));
-
         kafkaConsumer.seek(partition, readOffsetFrom);
-
-
         boolean keepread= true;
-
         int counter = 0;
-
         while(keepread){
-
             ConsumerRecords<String ,String> records = kafkaConsumer.poll(Duration.ofMillis(100));
-
             for(ConsumerRecord<String ,String > record :records){
-
                 logger.info("key = "+record.key());
                 logger.info("value = "+record.value());
                 logger.info("partition = "+record.partition());
                 logger.info("offset  = "+record.offset());
-
                  counter = counter +1;
-
                  if(counter > 5){
-
                      keepread = false;
                      break;
                  }
-
             }
-
-
-
-
         }
-
-
-
-
-
     }
 }
