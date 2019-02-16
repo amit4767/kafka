@@ -15,7 +15,7 @@ public class KakfaProducerTest {
         //properties.setProperty("bootstrap.servers","192.168.99.100:9092");
 
         final Logger logger = LoggerFactory.getLogger(KakfaProducerTest.class);
-        properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:29092");
+        properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"192.168.99.100:9092");
         properties.setProperty("key.serializer", StringSerializer.class.getName());
         properties.setProperty("value.serializer", StringSerializer.class.getName());
         properties.setProperty("retries","3");
