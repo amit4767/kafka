@@ -30,6 +30,12 @@ public class KakfaProducerTest {
         properties.setProperty(ProducerConfig.RETRIES_CONFIG,Integer.toString(Integer.MAX_VALUE));
         KafkaProducer<String ,String> producer = new KafkaProducer<String, String>(properties) ;
 
+        //Higher through put setting at the bit cpu usage n latency .
+        properties.setProperty(ProducerConfig.COMPRESSION_TYPE_CONFIG,"snappy");
+        properties.setProperty(ProducerConfig.LINGER_MS_CONFIG,"20");
+        properties.setProperty(ProducerConfig.BATCH_SIZE_CONFIG,Integer.toString(32*1024));
+
+
 
         for(int i = 0 ; i< 10 ;i++){
 
