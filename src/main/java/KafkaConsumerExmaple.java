@@ -73,6 +73,8 @@ public class KafkaConsumerExmaple {
             properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,StringDeserializer.class.getName());
             properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG,"myid2");
             properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"earliest");
+
+            properties.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG,"false");
             KafkaConsumer<String,String> kafkaConsumer = new KafkaConsumer<String, String>(properties);
             kafkaConsumer.subscribe(Arrays.asList("amittest"));
             kafkaConsumer = new KafkaConsumer<>(properties);
@@ -91,6 +93,8 @@ public class KafkaConsumerExmaple {
                         logger.info("offset  = "+record.offset());
 
                     }
+
+                    kafkaConsumer.commitSync();
                 }
             } catch (Exception e) {
                 logger.error("Wake up exception");
