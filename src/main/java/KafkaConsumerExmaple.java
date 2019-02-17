@@ -79,7 +79,8 @@ public class KafkaConsumerExmaple {
             kafkaConsumer.subscribe(Arrays.asList("amittest"));
             kafkaConsumer = new KafkaConsumer<>(properties);
         }
-        @Override
+
+        
         public void run() {
 
             try {
