@@ -3,7 +3,6 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +65,7 @@ public class KafkaConsumerExmaple {
         CountDownLatch latch;
 
         public ConumserThread(String topicname , String bootstrap ,String groupid , CountDownLatch latch){
-
+            this.latch = latch;
             Properties properties = new Properties();
             properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,"192.168.99.100:9092");
             properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
@@ -75,9 +74,9 @@ public class KafkaConsumerExmaple {
             properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"earliest");
 
             properties.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG,"false");
-            KafkaConsumer<String,String> kafkaConsumer = new KafkaConsumer<String, String>(properties);
+            kafkaConsumer = new KafkaConsumer<String, String>(properties);
             kafkaConsumer.subscribe(Arrays.asList("amittest"));
-            kafkaConsumer = new KafkaConsumer<>(properties);
+
         }
 
         
@@ -86,7 +85,7 @@ public class KafkaConsumerExmaple {
             try {
                 while(true){
 
-                    ConsumerRecords<String ,String> records = kafkaConsumer.poll(Duration.ofMillis(100));
+                    ConsumerRecords<String ,String> records = this.kafkaConsumer.poll(Duration.ofMillis(100));
                     for(ConsumerRecord<String ,String > record :records){
                         logger.info("key = "+record.key());
                         logger.info("value = "+record.value());
