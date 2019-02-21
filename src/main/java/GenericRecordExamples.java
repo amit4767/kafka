@@ -1,6 +1,12 @@
 import org.apache.avro.Schema;
+import org.apache.avro.file.DataFileWriter;
+import org.apache.avro.generic.GenericDatumWriter;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.generic.GenericRecordBuilder;
+import org.apache.avro.io.DatumWriter;
+
+import java.io.File;
+import java.io.IOException;
 
 public class GenericRecordExamples {
 
@@ -37,6 +43,20 @@ public class GenericRecordExamples {
         GenericRecord gr = grb.build();
 
         System.out.println("gr =="+gr);
+
+
+        ///Write to file.
+
+        final DatumWriter<GenericRecord> datumWriter = new GenericDatumWriter<>(schema);
+        try (DataFileWriter<GenericRecord> dataFileWriter = new DataFileWriter<>(datumWriter)) {
+            dataFileWriter.create(gr.getSchema(), new File("customer-generic.avro"));
+            dataFileWriter.append(gr);
+            System.out.println("Written customer-generic.avro");
+        } catch (IOException e) {
+            System.out.println("Couldn't write file");
+            e.printStackTrace();
+        }
+
 
 
     }
